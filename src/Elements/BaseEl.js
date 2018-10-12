@@ -40,13 +40,10 @@ class BaseEl {
     children.length > 0 && children.forEach(child => {
       this.children.push(child);
       this.el.appendChild(child.el);
+
+      this.isAttachedToDom && child.notifyAttachToDom(this);
     });
 
-    if (this.isAttachedToDom) {
-      children && children.forEach(child => {
-        child.notifyAttachToDom(this);
-      });
-    }
     return this;
   }
 

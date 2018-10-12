@@ -6,8 +6,8 @@ import {writeToLogger} from '../logger';
  * - lazyLoading
  */
 class ImageEl extends BaseEl {
-  constructor({type, lazyLoadSrcArr, width, height, adjustSizeToOriginalImg}) {
-    super({type});
+  constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg}) {
+    super({type : 'img'});
     this.hasBeenLoaded = false;
 
     this.lazyLoadSrcArr = lazyLoadSrcArr;

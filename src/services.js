@@ -17,9 +17,7 @@ const getData = ({appType, appApikey, userSession, sourceId, itemsOnPage, source
   return new Promise((resolve, reject) => {
     fetch(`${BASE_URL}user.session=${userSession}&app.type=${appType}&app.apikey=${appApikey}&count=${itemsOnPage}&source.url=${sourceUrl}&source.type=${sourceType}&source.id=${sourceId}&rec.thumbnail.width=${itemWidth}&rec.thumbnail.height=${itemHeight}`)
       .then((response) => {
-        const data = response.json();
-        // localStorage.setItem(`myWidgetSession-${appApikey}`, data.);
-        return data;
+        return response.json();
       })
       .then((myJson) => {
         resolve(myJson);
