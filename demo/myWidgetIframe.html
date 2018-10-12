@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css">
+    body {background:none transparent;
+    }
+</style>
+<body>
+<div id="root"></div>
+<script>
+  (function (w,d,s,o,f,js,fjs) {
+    w['myWidget']=o;w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) };
+    js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
+    js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs);
+  }(window, document, 'script', 'mw', './widget.js'));
+  mw('init', {});
+  mw('open', {
+    rootElId: 'root',
+    type : 'sponsored'
+  });
+</script>
+</body>
+</html>
