@@ -7,7 +7,7 @@ import {writeToLogger} from '../logger';
  */
 class ImageEl extends BaseEl {
   constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg}) {
-    super({type : 'img'});
+    super({type: 'img'});
     this.hasBeenLoaded = false;
 
     this.lazyLoadSrcArr = lazyLoadSrcArr;
@@ -44,39 +44,43 @@ class ImageEl extends BaseEl {
         lazyImage.getBoundingClientRect().top <= window.innerHeight &&
         lazyImage.getBoundingClientRect().bottom >= 0) &&
       getComputedStyle(lazyImage).display !== "none") {
-
-      let position = 0;
-      if (this.lazyLoadSrcArr.length > 1) {
-        position = this.getPositionOfClosestSize()
-      }
-
-      const imgData = this.lazyLoadSrcArr[position];
-      const width = this.lazyLoadSrcArr[position].width && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].width}px` : this.defaultWidth;
-      const height = this.lazyLoadSrcArr[position].height && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].height}px` : this.defaultHeight;
-
-      this.el.onerror = function (ev) {
-        writeToLogger({
-          msg: `unable to load img : ${imgData.url}`
-        });
-        this.setAttr({name: 'style', value: 'display:none;'}).notifyErrorToParent({
-          type: 'img',
-          width,
-          height
-        });
-      }.bind(this);
-
-      this.setAttr({name: 'src', value: imgData.url});
-
-      if (this.adjustSizeToOriginalImg) {
-        this.setAttr({name: 'style', value: `width:${width }; height:${height};`});
-      }
-
-      this.hasBeenLoaded = true;
-
-      document.removeEventListener("scroll", this.checkLazyLoad);
-      window.removeEventListener("resize", this.checkLazyLoad);
-      window.removeEventListener("orientationchange", this.checkLazyLoad);
+      this.updateSrc();
     }
+  }
+
+  updateSrc() {
+    let position = 0;
+    if (this.lazyLoadSrcArr.length > 1) {
+      position = this.getPositionOfClosestSize()
+    }
+
+    const imgData = this.lazyLoadSrcArr[position];
+    const width = this.lazyLoadSrcArr[position].width && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].width}px` : this.defaultWidth;
+    const height = this.lazyLoadSrcArr[position].height && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].height}px` : this.defaultHeight;
+
+    this.el.onerror = function (ev) {
+      writeToLogger({
+        msg: `unable to load img : ${imgData.url}`
+      });
+      this.setAttr({name: 'style', value: 'display:none;'}).notifyErrorToParent({
+        type: 'img',
+        width,
+        height
+      });
+    }.bind(this);
+
+    this.setAttr({name: 'src', value: imgData.url});
+
+    if (this.adjustSizeToOriginalImg) {
+      this.setAttr({name: 'style', value: `width:${width }; height:${height};`});
+    }
+
+    this.hasBeenLoaded = true;
+
+    document.removeEventListener("scroll", this.checkLazyLoad);
+    window.removeEventListener("resize", this.checkLazyLoad);
+    window.removeEventListener("orientationchange", this.checkLazyLoad);
+    return this;
   }
 
   /**
@@ -90,6 +94,13 @@ class ImageEl extends BaseEl {
     return this;
   }
 
+  /**
+   * Load all content without lazy-load
+   */
+  loadAllContent() {
+    super.loadAllContent();
+    this.updateSrc();
+  }
 }
 
 export default ImageEl;

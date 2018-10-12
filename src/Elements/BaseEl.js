@@ -96,6 +96,14 @@ class BaseEl {
   }
 
   /**
+   * Load all content without lazy-load
+   */
+  loadAllContent(){
+    this.children && this.children.forEach(child => {
+      child.loadAllContent();
+    });
+  }
+  /**
    * get HTML element
    * @returns {Element|*}
    */

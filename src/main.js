@@ -45,14 +45,17 @@ function apiHandler(api, params) {
 
   switch (api) {
     // TODO: add API implementation
-    case 'sponsored':
+    case
+    'sponsored'
+    :
       writeToLogger(params);
       getData(Object.assign(params.requestParams, {
         userSession: getStorage(`myWidgetSession-${params.requestParams.appApikey}`) || 'init'
       })).then((response) => {
         setStorage({key: `myWidgetSession-${params.requestParams.appApikey}`, value: response.id});
         writeToLogger(response.id);
-        createGallery({
+
+        const gallery = createGallery({
           data: response,
           rootElId: params.rootElId,
           imgSize: {
@@ -61,6 +64,11 @@ function apiHandler(api, params) {
             height: `${params.requestParams.itemHeight}px`
           }
         });
+
+        setTimeout(() => {
+          gallery && gallery.loadAllContent();
+        }, params.time);
+
       }).catch(error => {
         writeToLogger(error);
         params.hideOnNetworkError ?

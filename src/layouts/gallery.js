@@ -40,9 +40,10 @@ const innerLiStructure = ({item, imgSize}) => {
 
 const createGallery = ({data, rootElId, imgSize}) => {
   const {list, id} = data;
-
+  let ul;
+  console.log('############');
   if (list.length > 0) {
-    const ul = new BaseEl({type: 'ul'})
+    ul = new BaseEl({type: 'ul'})
       .setAttr({
         name: 'style',
         value: 'display:flex; flex-flow: row wrap; justify-content:space-around; width: 100%; padding:5px; list-style: none;'
@@ -54,6 +55,8 @@ const createGallery = ({data, rootElId, imgSize}) => {
 
     ul.attachToDOM(rootElId);
   }
+
+  return ul;
 };
 
 export {

@@ -37,8 +37,9 @@
     },
     rootElId: 'widgetPlaceHolder',
     type : 'sponsored',
-    adjustSizeToOriginalImg: false,
-    hideOnNetworkError : false
+    adjustSizeToOriginalImg: true, // adjust images by the provided size from the api
+    hideOnNetworkError : false, // hide gallery on network error, false will show error message
+    loadAllContent : {time : 5000} // allow the host to setTimeout for loading the gallery images
   });
 </script>
 <p>Orci purus ante excepteur nunc nascetur rhoncus taciti ut. Ornare vitae sed. Amet suspendisse integer rutrum aliquet
