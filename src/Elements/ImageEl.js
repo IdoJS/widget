@@ -6,7 +6,7 @@ import {writeToLogger} from '../logger';
  * - lazyLoading
  */
 class ImageEl extends BaseEl {
-  constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg}) {
+  constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg, showOnSrcError}) {
     super({type: 'img'});
     this.hasBeenLoaded = false;
 
@@ -14,6 +14,7 @@ class ImageEl extends BaseEl {
     this.adjustSizeToOriginalImg = adjustSizeToOriginalImg;
     this.defaultWidth = width;
     this.defaultHeight = height;
+    this.showOnSrcError = showOnSrcError;
 
     this.checkLazyLoad = this.checkLazyLoad.bind(this);
 
@@ -67,6 +68,7 @@ class ImageEl extends BaseEl {
         width,
         height
       });
+      if (this.showOnSrcError) this.showOnSrcError.getElAsHTML().style.display = '';
     }.bind(this);
 
     this.setAttr({name: 'src', value: imgData.url});

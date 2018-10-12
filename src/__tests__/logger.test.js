@@ -1,5 +1,14 @@
-const expect = require('chai').expect;
+const writeToLogger = (data) => {
+  const key = Date.now();
+  window.myWidgetNameSpace = window.myWidgetNameSpace || {
+    logger : {}
+  };
 
-describe('logger', () => {
+  window.myWidgetNameSpace.logger[key] = data;
 
-});
+  return key;
+};
+
+export {
+  writeToLogger
+}

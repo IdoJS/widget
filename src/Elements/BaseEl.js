@@ -89,7 +89,7 @@ class BaseEl {
   notifyError({type, width, height}) {
     switch (type) {
       case 'img':
-        this.setAttr({name: 'style', value: `border:1px solid black; width:${width}; height:${height}; display:flex; align-items: center; justify-content: center;`});
+        this.setAttr({name: 'style', value: `border:1px solid black; width:${width}; height:${height}; display:flex; flex-direction:column; align-items: center; justify-content: center;`});
         break;
     }
     return this;

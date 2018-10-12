@@ -13,7 +13,9 @@ import ImageEl from '../Elements/ImageEl';
  * @returns {BaseEl}
  */
 const innerLiStructure = ({item, imgSize}) => {
-  const li = new BaseEl({type: 'li'});
+  const li = new BaseEl({type: 'li'})
+    .setAttr({name: 'style', value: 'cursor:pointer;'});
+
   const href = new BaseEl('a').setAttr({
     name: 'style',
     value: 'display:flex; flex-direction:column; justify-content:space-between; margin:5px; text-decoration: none; color:#000; font-size:18px;'
@@ -21,17 +23,23 @@ const innerLiStructure = ({item, imgSize}) => {
     .setAttr({name: 'href', value: item.url})
     .setAttr({name: 'target', value: '_blank'});
 
+  const desc = new BaseEl({type: 'span'})
+    .setAttr({name: 'style', value: `width:${imgSize.width}; padding: 5px 5%; display:none; font-size:14px;`})
+    .setText(item.description);
+
   const image = new ImageEl(Object.assign({
     type: 'img',
-    lazyLoadSrcArr: item.thumbnail && item.thumbnail[0] && item.thumbnail
+    lazyLoadSrcArr: item.thumbnail && item.thumbnail[0] && item.thumbnail,
+    showOnSrcError: desc
   }, imgSize))
     .setAttr({name: 'style', value: `height:${imgSize.height}; width:${imgSize.width}`});
 
-  const span = new BaseEl({type: 'span'})
+  const title = new BaseEl({type: 'span'})
     .setAttr({name: 'style', value: `width:${imgSize.width}; padding: 0px 5%;`})
     .setText(item.name);
 
-  href.attachChildren([image, span]);
+
+  href.attachChildren([image, title, desc]);
 
   li.attachChildren([href]);
 
@@ -41,7 +49,6 @@ const innerLiStructure = ({item, imgSize}) => {
 const createGallery = ({data, rootElId, imgSize}) => {
   const {list, id} = data;
   let ul;
-  console.log('############');
   if (list.length > 0) {
     ul = new BaseEl({type: 'ul'})
       .setAttr({

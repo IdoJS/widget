@@ -1,5 +1,5 @@
 const jsdom = require("jsdom");
-const { window } = new jsdom.JSDOM('<!doctype html><html><body></body></html>');
+const { window } = new jsdom.JSDOM('<!doctype html><html><body><div id="root"></div></body></html>');
 
 const nodeExternals = require('webpack-node-externals');
 

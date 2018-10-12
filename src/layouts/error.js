@@ -11,11 +11,15 @@ const showErrorMsg = ({data, rootElId}) => {
     .setText(text);
 
   errorEl.attachToDOM(rootElId);
+
+  return errorEl;
 };
 
 const hideOnError = ({rootElId}) => {
   const root = document.getElementById(rootElId);
-  root.style.display = 'none';
+  if (root) root.style.display = 'none';
+
+  return root;
 };
 
 export {

@@ -8,7 +8,7 @@ const supportedAPI = ['init', 'sponsored']; // enlist all methods supported by A
 /**
  The main entry of the application
  */
-function app(window) {
+const app = (window) => {
   // set default configurations
   const configurations = {};
 
@@ -30,12 +30,12 @@ function app(window) {
   // for widget's API calls
   globalObject = apiHandler;
   globalObject.configurations = configurations;
-}
+};
 
 /**
  Method that handles all API calls
  */
-function apiHandler(api, params) {
+const apiHandler = (api, params) => {
   if (!api) throw Error('API method required');
   api = api.toLowerCase();
 
@@ -46,8 +46,7 @@ function apiHandler(api, params) {
   switch (api) {
     // TODO: add API implementation
     case
-    'sponsored'
-    :
+    'sponsored':
       writeToLogger(params);
       getData(Object.assign(params.requestParams, {
         userSession: getStorage(`myWidgetSession-${params.requestParams.appApikey}`) || 'init'
@@ -85,6 +84,6 @@ function apiHandler(api, params) {
     default:
       console.warn(`No handler defined for ${api}`);
   }
-}
+};
 
 app(window);
