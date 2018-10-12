@@ -14,16 +14,7 @@ const BASE_URL = 'http://api.taboola.com/1.0/json/taboola-templates/recommendati
  * @returns {Promise}
  */
 const getData = ({appType, appApikey, userSession, sourceId, itemsOnPage, sourceType, sourceUrl, itemWidth, itemHeight}) => {
-  return new Promise((resolve, reject) => {
-    fetch(`${BASE_URL}user.session=${userSession}&app.type=${appType}&app.apikey=${appApikey}&count=${itemsOnPage}&source.url=${sourceUrl}&source.type=${sourceType}&source.id=${sourceId}&rec.thumbnail.width=${itemWidth}&rec.thumbnail.height=${itemHeight}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((myJson) => {
-        resolve(myJson);
-      }).catch(error => reject(error));
-  });
-
+  return fetch(`${BASE_URL}user.session=${userSession}&app.type=${appType}&app.apikey=${appApikey}&count=${itemsOnPage}&source.url=${sourceUrl}&source.type=${sourceType}&source.id=${sourceId}&rec.thumbnail.width=${itemWidth}&rec.thumbnail.height=${itemHeight}`);
 };
 
 /**

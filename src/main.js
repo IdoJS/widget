@@ -50,40 +50,58 @@ const apiHandler = (api, params) => {
       writeToLogger(params);
       getData(Object.assign(params.requestParams, {
         userSession: getStorage(`myWidgetSession-${params.requestParams.appApikey}`) || 'init'
-      })).then((response) => {
-        setStorage({key: `myWidgetSession-${params.requestParams.appApikey}`, value: response.id});
-        writeToLogger(response.id);
-
-        const gallery = createGallery({
-          data: response,
-          rootElId: params.rootElId,
-          imgSize: {
-            adjustSizeToOriginalImg: params.adjustSizeToOriginalImg,
-            width: `${params.requestParams.itemWidth}px`,
-            height: `${params.requestParams.itemHeight}px`
-          }
-        });
-
-        setTimeout(() => {
-          gallery && gallery.loadAllContent();
-        }, params.time);
-
+      })).then(response => response.json()).then((response) => {
+        manageResponseSuccess({response, params});
       }).catch(error => {
-        writeToLogger(error);
-        params.hideOnNetworkError ?
-          hideOnError({rootElId: params.rootElId}) :
-          showErrorMsg({
-            data: {
-              text: 'Network errors.',
-              error
-            },
-            rootElId: params.rootElId
-          });
+        manageResponseError({error, params});
       });
       break;
     default:
       console.warn(`No handler defined for ${api}`);
   }
+};
+
+/**
+ * Handle success data
+ * @param response
+ * @param params
+ */
+const manageResponseSuccess = ({response, params}) => {
+  setStorage({key: `myWidgetSession-${params.requestParams.appApikey}`, value: response.id});
+  writeToLogger(response.id);
+
+  const gallery = createGallery({
+    data: response,
+    rootElId: params.rootElId,
+    imgSize: {
+      adjustSizeToOriginalImg: params.adjustSizeToOriginalImg,
+      width: `${params.requestParams.itemWidth}px`,
+      height: `${params.requestParams.itemHeight}px`
+    }
+  });
+
+  setTimeout(() => {
+    gallery && gallery.loadAllContent();
+  }, params.time);
+
+};
+
+/**
+ * Handle error
+ * @param error
+ * @param params
+ */
+const manageResponseError = ({error, params}) => {
+  writeToLogger(error);
+  params.hideOnNetworkError ?
+    hideOnError({rootElId: params.rootElId}) :
+    showErrorMsg({
+      data: {
+        text: 'Network errors.',
+        error
+      },
+      rootElId: params.rootElId
+    });
 };
 
 app(window);
