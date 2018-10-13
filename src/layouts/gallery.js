@@ -23,14 +23,10 @@ const innerLiStructure = ({item, imgSize}) => {
     .setAttr({name: 'href', value: item.url})
     .setAttr({name: 'target', value: '_blank'});
 
-  const desc = new BaseEl({type: 'span'})
-    .setAttr({name: 'style', value: `width:${imgSize.width}; padding: 5px 5%; display:none; font-size:14px;`})
-    .setText(item.description);
-
   const image = new ImageEl(Object.assign({
     type: 'img',
     lazyLoadSrcArr: item.thumbnail && item.thumbnail[0] && item.thumbnail,
-    showOnSrcError: desc
+    hideOnError: li
   }, imgSize))
     .setAttr({name: 'style', value: `height:${imgSize.height}; width:${imgSize.width}`});
 
@@ -39,7 +35,7 @@ const innerLiStructure = ({item, imgSize}) => {
     .setText(item.name);
 
 
-  href.attachChildren([image, title, desc]);
+  href.attachChildren([image, title]);
 
   li.attachChildren([href]);
 

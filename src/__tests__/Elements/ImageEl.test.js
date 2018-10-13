@@ -3,13 +3,30 @@ import ImageEl from '../../../src/Elements/ImageEl';
 const expect = require('chai').expect;
 
 describe('ImageEl', () => {
-  let instance;
+  const instance = new ImageEl({
+    lazyLoadSrcArr: [{url: 'test'}],
+    width: '200px',
+    height: '200px',
+    adjustSizeToOriginalImg: true
+  });
+
   it('Initialize ImageEl', () => {
-    instance = new ImageEl({lazyLoadSrcArr: [], width:'200px', height:'200px', adjustSizeToOriginalImg: true});
     expect(instance).to.be.an.instanceof(ImageEl);
   });
 
   it('Check ImageEl context', () => {
     expect(instance.isAttachedToDom).to.be.false;
+  });
+
+  it('loadAllContent()', () => {
+    expect(instance.hasBeenLoaded).to.be.false;
+    instance.loadAllContent();
+    expect(instance.hasBeenLoaded).to.be.true;
+  });
+
+  it('handleOnSrcError', () => {
+    const ev = {srcElement: {currentSrc: 'fake_src'}};
+    const key = instance.handleOnSrcError(ev);
+    expect(window.myWidgetNameSpace.logger[key].msg).to.have.string(ev.srcElement.currentSrc);
   });
 });

@@ -16,6 +16,7 @@ class BaseEl {
 
   /**
    * Attach the element to specific DOM element
+   * Once it attached it notify to all the children that they are attached to the DOM
    * @param parentId <string>
    * @returns {BaseEl}
    */
@@ -38,10 +39,12 @@ class BaseEl {
    */
   attachChildren(children) {
     children.length > 0 && children.forEach(child => {
-      this.children.push(child);
-      this.el.appendChild(child.el);
+      if (child instanceof BaseEl){
+        this.children.push(child);
+        this.el.appendChild(child.el);
 
-      this.isAttachedToDom && child.notifyAttachToDom(this);
+        this.isAttachedToDom && child.notifyAttachToDom(this);
+      }
     });
 
     return this;
@@ -79,6 +82,11 @@ class BaseEl {
     });
   }
 
+  /**
+   * Notify parent on error
+   * @param data
+   * @returns {BaseEl}
+   */
   notifyErrorToParent(data) {
     if (this.parent) {
       this.parent[0].notifyError(data);
@@ -86,9 +94,19 @@ class BaseEl {
     return this;
   }
 
-  notifyError({type, width, height}) {
+  /**
+   * Handle errors
+   * @param type
+   * @param width
+   * @param height
+   * @returns {BaseEl}
+   */
+  notifyError({type, width = '0px', height = '0px'}) {
     switch (type) {
-      case 'img':
+      case 'srcError':
+        this.setAttr({name: 'style', value: 'display:none;'});
+        break;
+      default:
         this.setAttr({name: 'style', value: `border:1px solid black; width:${width}; height:${height}; display:flex; flex-direction:column; align-items: center; justify-content: center;`});
         break;
     }

@@ -6,7 +6,7 @@ import {writeToLogger} from '../logger';
  * - lazyLoading
  */
 class ImageEl extends BaseEl {
-  constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg, showOnSrcError}) {
+  constructor({lazyLoadSrcArr, width, height, adjustSizeToOriginalImg, hideOnError}) {
     super({type: 'img'});
     this.hasBeenLoaded = false;
 
@@ -14,9 +14,10 @@ class ImageEl extends BaseEl {
     this.adjustSizeToOriginalImg = adjustSizeToOriginalImg;
     this.defaultWidth = width;
     this.defaultHeight = height;
-    this.showOnSrcError = showOnSrcError;
+    this.hideOnError = hideOnError;
 
     this.checkLazyLoad = this.checkLazyLoad.bind(this);
+    this.handleOnSrcError = this.handleOnSrcError.bind(this);
 
     document.addEventListener("scroll", this.checkLazyLoad);
     window.addEventListener("resize", this.checkLazyLoad);
@@ -49,6 +50,26 @@ class ImageEl extends BaseEl {
     }
   }
 
+  /**
+   * Handle onError (src error)
+   * @param ev
+   */
+  handleOnSrcError(ev){
+    const key = writeToLogger({
+      msg: `unable to load img : ${ev.srcElement.currentSrc}`
+    });
+
+    if (this.hideOnError) {
+      this.hideOnError.getElAsHTML().style.display = 'none';
+    } else {
+      this.setAttr({name: 'style', value: 'display:none;'}).notifyErrorToParent({
+        type: 'srcError'
+      });
+    }
+
+    return key;
+  }
+
   updateSrc() {
     let position = 0;
     if (this.lazyLoadSrcArr.length > 1) {
@@ -59,17 +80,7 @@ class ImageEl extends BaseEl {
     const width = this.lazyLoadSrcArr[position].width && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].width}px` : this.defaultWidth;
     const height = this.lazyLoadSrcArr[position].height && this.adjustSizeToOriginalImg ? `${this.lazyLoadSrcArr[position].height}px` : this.defaultHeight;
 
-    this.el.onerror = function (ev) {
-      writeToLogger({
-        msg: `unable to load img : ${imgData.url}`
-      });
-      this.setAttr({name: 'style', value: 'display:none;'}).notifyErrorToParent({
-        type: 'img',
-        width,
-        height
-      });
-      if (this.showOnSrcError) this.showOnSrcError.getElAsHTML().style.display = '';
-    }.bind(this);
+    this.el.onerror = this.handleOnSrcError;
 
     this.setAttr({name: 'src', value: imgData.url});
 
