@@ -10,6 +10,7 @@ class BaseEl {
     this.isAttachedToDom = false;
     this.children = [];
     this.parent = null;
+    this.on = null;
     this.notifyError = this.notifyError.bind(this);
     return this;
   }
@@ -39,7 +40,7 @@ class BaseEl {
    */
   attachChildren(children) {
     children.length > 0 && children.forEach(child => {
-      if (child instanceof BaseEl){
+      if (child instanceof BaseEl) {
         this.children.push(child);
         this.el.appendChild(child.el);
 
@@ -89,26 +90,25 @@ class BaseEl {
    */
   notifyErrorToParent(data) {
     if (this.parent) {
-      this.parent[0].notifyError(data);
+      this.parent.notifyError(data);
     }
     return this;
   }
 
   /**
-   * Handle errors
+   * Notify Host on Error
    * @param type
    * @param width
    * @param height
    * @returns {BaseEl}
    */
-  notifyError({type, width = '0px', height = '0px'}) {
-    switch (type) {
-      case 'srcError':
-        this.setAttr({name: 'style', value: 'display:none;'});
-        break;
-      default:
-        this.setAttr({name: 'style', value: `border:1px solid black; width:${width}; height:${height}; display:flex; flex-direction:column; align-items: center; justify-content: center;`});
-        break;
+  notifyError(data) {
+    if (this.on) {
+      this.on(data)
+    } else {
+      if (this.parent) {
+        this.notifyErrorToParent(data);
+      }
     }
     return this;
   }
@@ -116,11 +116,12 @@ class BaseEl {
   /**
    * Load all content without lazy-load
    */
-  loadAllContent(){
+  loadAllContent() {
     this.children && this.children.forEach(child => {
       child.loadAllContent();
     });
   }
+
   /**
    * get HTML element
    * @returns {Element|*}
@@ -129,6 +130,13 @@ class BaseEl {
     return this.el;
   }
 
+  /**
+   * save callback to notify host on events
+   * @param callback
+   */
+  event(callback) {
+    this.on = callback
+  }
 }
 
 export default BaseEl;

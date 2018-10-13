@@ -3,7 +3,7 @@ import {createGallery} from './layouts/gallery';
 import {showErrorMsg, hideOnError} from './layouts/error';
 import {writeToLogger} from './logger';
 
-const supportedAPI = ['init', 'sponsored']; // enlist all methods supported by API (e.g. `mw('sponsored', '{...}');`)
+const supportedAPI = ['init', 'sponsored', 'on']; // enlist all methods supported by API (e.g. `mw('sponsored', '{...}');`)
 
 /**
  The main entry of the application
@@ -14,7 +14,7 @@ const app = (window) => {
 
   // all methods that were called till now and stored in queue
   // needs to be called now
-  let globalObject = window[window['myWidget']];
+  let globalObject = window[window['com.company.myWidget']];
   const queue = globalObject.q;
   if (queue) {
     for (let i = 0; i < queue.length; i++) {
@@ -78,7 +78,8 @@ const manageResponseSuccess = ({response, params}) => {
       width: `${params.requestParams.itemWidth}px`,
       height: `${params.requestParams.itemHeight}px`
     }
-  });
+  }).event(params.widgetNotification);
+
 
   setTimeout(() => {
     gallery && gallery.loadAllContent();

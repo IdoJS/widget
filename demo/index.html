@@ -20,7 +20,7 @@
 <div id="widgetPlaceHolder"></div>
 <script>
   (function (w,d,s,o,f,js,fjs) {
-    w['myWidget']=o;w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) };
+    w['com.company.myWidget']=o;w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) };
     js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
     js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs);
   }(window, document, 'script', 'mw', './widget.js'));
@@ -39,8 +39,12 @@
     type : 'sponsored',
     adjustSizeToOriginalImg: true, // adjust images by the provided size from the api
     hideOnNetworkError : false, // hide gallery on network error, false will show error message
-    loadAllContent : {time : 5000} // allow the host to setTimeout for loading the gallery images
+    loadAllContent : {time : 5000}, // allow the host to setTimeout for loading the gallery images
+    widgetNotification : (...data)=>{
+      console.log('myWidget event ', ...data);
+    }
   });
+
 </script>
 <p>Orci purus ante excepteur nunc nascetur rhoncus taciti ut. Ornare vitae sed. Amet suspendisse integer rutrum aliquet
     venenatis. Nec sed nullam mauris magna vel pretium non tristique. Porta justo ac dictumst aliquip blandit. Libero

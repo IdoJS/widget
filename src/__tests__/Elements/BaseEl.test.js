@@ -67,5 +67,15 @@ describe('BaseEl', () => {
       instance.setText(text);
       expect(instance.getElAsHTML().innerText).to.have.string(text);
     });
+    it('event(callback)', ()=>{
+      let eventData = '';
+      const sendData = 'test';
+      const callback = (data) => {
+        eventData = data;
+      };
+      instance.event(callback);
+      instance.on(sendData);
+      expect(eventData).to.have.string(sendData);
+    });
   });
 });

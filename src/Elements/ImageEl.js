@@ -62,10 +62,12 @@ class ImageEl extends BaseEl {
     if (this.hideOnError) {
       this.hideOnError.getElAsHTML().style.display = 'none';
     } else {
-      this.setAttr({name: 'style', value: 'display:none;'}).notifyErrorToParent({
-        type: 'srcError'
-      });
+      this.setAttr({name: 'style', value: 'display:none;'})
     }
+
+    this.notifyErrorToParent({
+      type: 'srcError'
+    });
 
     return key;
   }
@@ -101,7 +103,7 @@ class ImageEl extends BaseEl {
    * Once El in the DOM we can check LazyLoading.
    */
   notifyAttachToDom(...data) {
-    super.notifyAttachToDom(data);
+    super.notifyAttachToDom(...data);
     this.checkLazyLoad();
 
     return this;
