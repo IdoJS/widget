@@ -1,4 +1,5 @@
 import BaseEl from '../Elements/BaseEl';
+import {style} from '../constants';
 
 const showErrorMsg = ({data, rootElId}) => {
   const {text} = data;
@@ -6,7 +7,7 @@ const showErrorMsg = ({data, rootElId}) => {
   const errorEl = new BaseEl({type: 'div'})
     .setAttr({
       name: 'style',
-      value: 'width: 100%; padding:5px; border:1px solid #000; font-weight:bold; font-size:18px; text-align:center;'
+      value: style.ERROR.CONTAINER
     })
     .setText(text);
 

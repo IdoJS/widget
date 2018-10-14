@@ -1,5 +1,6 @@
 import BaseEl from '../Elements/BaseEl';
 import ImageEl from '../Elements/ImageEl';
+import {style} from '../constants';
 
 /**
  * Li inner layout :
@@ -18,7 +19,7 @@ const innerLiStructure = ({item, imgSize}) => {
 
   const href = new BaseEl('a').setAttr({
     name: 'style',
-    value: 'display:flex; flex-direction:column; justify-content:space-between; margin:5px; text-decoration: none; color:#000; font-size:18px;'
+    value: style.GALLERY.HREF
   })
     .setAttr({name: 'href', value: item.url})
     .setAttr({name: 'target', value: '_blank'});
@@ -49,7 +50,7 @@ const createGallery = ({data, rootElId, imgSize}) => {
     ul = new BaseEl({type: 'ul'})
       .setAttr({
         name: 'style',
-        value: 'display:flex; flex-flow: row wrap; justify-content:space-around; width: 100%; padding:5px; list-style: none;'
+        value: style.GALLERY.UL
       });
 
     const children = list.map(item => innerLiStructure({item, imgSize}));

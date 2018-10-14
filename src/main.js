@@ -2,8 +2,9 @@ import {getData, setStorage, getStorage} from './services'
 import {createGallery} from './layouts/gallery';
 import {showErrorMsg, hideOnError} from './layouts/error';
 import {writeToLogger} from './logger';
+import {string, api} from './constants';
 
-const supportedAPI = ['init', 'sponsored', 'on']; // enlist all methods supported by API (e.g. `mw('sponsored', '{...}');`)
+const supportedAPI = [api.INIT, api.SPONSORED]; // enlist all methods supported by API (e.g. `mw('sponsored', '{...}');`)
 
 /**
  The main entry of the application
@@ -14,11 +15,11 @@ const app = (window) => {
 
   // all methods that were called till now and stored in queue
   // needs to be called now
-  let globalObject = window[window['com.company.myWidget']];
+  let globalObject = window[window[string.WIDGET]];
   const queue = globalObject.q;
   if (queue) {
     for (let i = 0; i < queue.length; i++) {
-      if (queue[i][0].toLowerCase() === 'init') {
+      if (queue[i][0].toLowerCase() === api.INIT) {
         Object.assign(configurations, queue[i][1]);
       }
       else
@@ -35,21 +36,21 @@ const app = (window) => {
 /**
  Method that handles all API calls
  */
-const apiHandler = (api, params) => {
-  if (!api) throw Error('API method required');
-  api = api.toLowerCase();
+const apiHandler = (hostApi, params) => {
+  if (!hostApi) throw Error('API method required');
+  hostApi = hostApi.toLowerCase();
 
-  if (supportedAPI.indexOf(api) === -1) throw Error(`Method ${api} is not supported`);
+  if (supportedAPI.indexOf(hostApi) === -1) throw Error(`Method ${hostApi} is not supported`);
 
-  console.log(`Handling API call ${api}`, params);
+  console.log(`Handling API call ${hostApi}`, params);
 
-  switch (api) {
+  switch (hostApi) {
     // TODO: add API implementation
     case
-    'sponsored':
+    api.SPONSORED.toLowerCase():
       writeToLogger(params);
       getData(Object.assign(params.requestParams, {
-        userSession: getStorage(`myWidgetSession-${params.requestParams.appApikey}`) || 'init'
+        userSession: getStorage(`${string.NAME_SPACE}-${params.requestParams.appApikey}`) || 'init'
       })).then(response => response.json()).then((response) => {
         manageResponseSuccess({response, params});
       }).catch(error => {
@@ -57,7 +58,7 @@ const apiHandler = (api, params) => {
       });
       break;
     default:
-      console.warn(`No handler defined for ${api}`);
+      console.warn(`No handler defined for ${hostApi}`);
   }
 };
 
@@ -67,7 +68,7 @@ const apiHandler = (api, params) => {
  * @param params
  */
 const manageResponseSuccess = ({response, params}) => {
-  setStorage({key: `myWidgetSession-${params.requestParams.appApikey}`, value: response.id});
+  setStorage({key: `${string.NAME_SPACE}-${params.requestParams.appApikey}`, value: response.id});
   writeToLogger(response.id);
 
   const gallery = createGallery({

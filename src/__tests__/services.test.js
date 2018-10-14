@@ -1,4 +1,4 @@
-import {setStorage, getStorage} from '../../src/services';
+import {setStorage, getStorage} from '../services';
 
 const expect = require('chai').expect;
 

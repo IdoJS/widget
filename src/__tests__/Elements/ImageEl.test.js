@@ -1,5 +1,5 @@
-import ImageEl from '../../../src/Elements/ImageEl';
-
+import ImageEl from '../../Elements/ImageEl';
+import {string} from '../../constants';
 const expect = require('chai').expect;
 
 describe('ImageEl', () => {
@@ -27,6 +27,6 @@ describe('ImageEl', () => {
   it('handleOnSrcError', () => {
     const ev = {srcElement: {currentSrc: 'fake_src'}};
     const key = instance.handleOnSrcError(ev);
-    expect(window.myWidgetNameSpace.logger[key].msg).to.have.string(ev.srcElement.currentSrc);
+    expect(window[string.NAME_SPACE].logger[key].msg).to.have.string(ev.srcElement.currentSrc);
   });
 });

@@ -1,4 +1,4 @@
-import BaseEl from '../../../src/Elements/BaseEl';
+import BaseEl from '../../Elements/BaseEl';
 
 const expect = require('chai').expect;
 
