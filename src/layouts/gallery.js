@@ -17,7 +17,7 @@ const innerLiStructure = ({item, imgSize}) => {
   const li = new BaseEl({type: 'li'})
     .setAttr({name: 'style', value: 'cursor:pointer;'});
 
-  const href = new BaseEl('a').setAttr({
+  const href = new BaseEl({type: 'a'}).setAttr({
     name: 'style',
     value: style.GALLERY.HREF
   })
